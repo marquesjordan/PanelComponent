@@ -3,9 +3,21 @@ import {View, StyleSheet, Text} from 'react-native';
 import ActivityShadow from './ActivityShadow';
 import {FlatList} from 'react-native-gesture-handler'
 
-export default ({pattern, updateDrag, color}) => {
+export default ({pattern, updateDrag, color, dragHandler, setInnerScroll, forwardedRef}) => {
     const [toggleShadow, setToggleShadow] = useState(false);
     const STOPS_LENGTH = pattern.stops.length;
+
+    const onScroll = (e) => {
+        setInnerScroll(e.nativeEvent.contentOffset.y)
+        if (e.nativeEvent.contentOffset.y > 0) {
+            setToggleShadow(true)
+            updateDrag(false);
+        } else {
+            console.log('stop ', e.nativeEvent.contentOffset.y)
+            setToggleShadow(false)
+            updateDrag(true)
+        }
+    }
 
     return (
         <View style={styles.fullFlex}>
@@ -19,10 +31,17 @@ export default ({pattern, updateDrag, color}) => {
                 <View>
                 <ActivityShadow showHeaderShadow={toggleShadow} bgColor={'#d4d6db'} />
                     <FlatList  
+                        {...dragHandler}
+                        ref={forwardedRef}
                         onScroll={event => {
-                            event.nativeEvent.contentOffset.y > 0 ?
-                            setToggleShadow(true) : setToggleShadow(false)
+                            onScroll(event)
+                            // console.log('HHHH ', dragHandler)
                         }}
+                        onMomentumScrollEnd={event => {
+                            onScroll(event)
+                        }}
+
+                        scrollEventThrottle={5}
                         scrollEventThrottle={2}
                         style={styles.listConatiner}
                         data={pattern.stops}
@@ -35,9 +54,6 @@ export default ({pattern, updateDrag, color}) => {
                         )}
                         keyExtractor={(item, index) => index.toString()}
                         scrollEnabled={true}
-                        onTouchStart={() => updateDrag(false)}
-                        onTouchEnd={() => updateDrag(true)}
-                        onTouchCancel={() => updateDrag(true)}
                         bounces={false}
                     />
                 </View>

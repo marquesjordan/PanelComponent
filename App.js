@@ -1,8 +1,9 @@
 import * as React from 'react';
-import { Text, View } from 'react-native';
+import { Text, View, StyleSheet } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import BottomPanel from './src/component/BottomPanel';
+import ScrollBottom from './src/component/ScrollBottom';
 import MapView from 'react-native-maps';
 
 function HomeScreen() {
@@ -15,9 +16,9 @@ function HomeScreen() {
             latitudeDelta: 0.0922,
             longitudeDelta: 0.0421,
           }}
-          style={{flex: 1}}
+          style={StyleSheet.absoluteFillObject}
         />
-        <BottomPanel />
+        <ScrollBottom />
     </View>
   );
 }

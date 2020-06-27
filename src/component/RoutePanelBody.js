@@ -7,7 +7,10 @@ import Swiper from 'react-native-swiper';
 export default ({
         patterns, 
         updateDrag,
-        color
+        color,
+        dragHandler,
+        setInnerScroll,
+        forwardedRef
     }) => {
 
     useEffect(() => {
@@ -21,6 +24,9 @@ export default ({
                     pattern={item}
                     updateDrag={updateDrag}
                     color={color}
+                    dragHandler={dragHandler}
+                    setInnerScroll={setInnerScroll}
+                    forwardedRef={forwardedRef}
                 />
             )
         })
